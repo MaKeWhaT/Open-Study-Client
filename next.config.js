@@ -1,15 +1,18 @@
 const path = require("path");
+const { merge } = require("webpack-merge");
 /** @type {import('next').NextConfig} */
 const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   optimizeFonts: false,
   webpack(config) {
-    config.resolve.alias = {
-      "@": path.resolve(__dirname),
-      ...config.resolve.alias,
-    };
-    return config;
+    return merge(config, {
+      resolve: {
+        alias: {
+          "@": path.resolve(__dirname),
+        },
+      },
+    });
   },
 };
 
