@@ -8,6 +8,7 @@ module.exports = {
   extends: [
     "next/core-web-vitals",
     "eslint:recommended",
+    "plugin:import/recommended",
     "plugin:react/recommended",
     "plugin:prettier/recommended",
     "plugin:storybook/recommended",
@@ -41,6 +42,15 @@ module.exports = {
     "import/extensions": 0,
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "import/order": [
+      "warn",
+      {
+        alphabetize: {
+          caseInsensitive: true,
+          order: "asc",
+        },
+      },
+    ],
   },
   overrides: [
     {

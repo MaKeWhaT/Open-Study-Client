@@ -1,3 +1,7 @@
+const path = require("path");
+const { merge } = require("webpack-merge");
+const webpack = require("webpack");
+
 module.exports = {
   stories: [
     "../stories/**/*.stories.mdx",
@@ -7,13 +11,7 @@ module.exports = {
     "@storybook/addon-links",
     "@storybook/addon-essentials",
     "@storybook/addon-interactions",
-    {
-      name: "storybook-addon-turbo-build",
-      options: {
-        optimizationLevel: 3,
-        disableSourceMap: true,
-      },
-    },
+    "storybook-addon-next",
   ],
   framework: "@storybook/react",
   features: {
@@ -25,5 +23,14 @@ module.exports = {
       lazyCompilation: true,
       fsCache: true,
     },
+  },
+  webpackFinal: async (config) => {
+    return merge(config, {
+      resolve: {
+        alias: {
+          "@": path.resolve(__dirname, "../"),
+        },
+      },
+    });
   },
 };
