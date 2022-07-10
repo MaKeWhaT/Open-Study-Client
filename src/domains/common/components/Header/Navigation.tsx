@@ -8,7 +8,7 @@ export default function Navigation() {
   return (
     <nav>
       <ul className="flex h-full font-medium">
-        {PAGE_NAVIGATOINS.map(({ href, text }) => (
+        {PAGE_NAVIGATIONS.map(({ href, text }) => (
           <li
             key={href}
             className={clsx(
@@ -28,7 +28,7 @@ export default function Navigation() {
   );
 }
 
-const PAGE_NAVIGATOINS = [
+const PAGE_NAVIGATIONS = [
   {
     href: "/study",
     text: "스터디 시작",
