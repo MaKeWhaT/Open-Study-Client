@@ -5,6 +5,9 @@ const nextConfig = {
   reactStrictMode: true,
   swcMinify: true,
   optimizeFonts: false,
+  images: {
+    domains: ["cdn.pixabay.com"],
+  },
   webpack(config) {
     return merge(config, {
       resolve: {

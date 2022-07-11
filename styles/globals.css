@@ -54,5 +54,6 @@
 @layer base {
   html {
     font-family: "Noto Sans Korean", system-ui, sans-serif;
+    font-weight: 500;
   }
 }

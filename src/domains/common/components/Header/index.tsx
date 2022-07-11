@@ -1,5 +1,6 @@
 import Link from "next/link";
 import Navigation from "@/src/domains/common/components/Header/Navigation";
+import Profile from "@/src/domains/common/components/Header/Profile";
 import Search from "@/src/domains/common/components/Header/Search";
 
 export default function Header() {
@@ -12,7 +13,8 @@ export default function Header() {
           </Link>
         </h1>
       </div>
-      <Navigation />
+      <Navigation className="mr-auto" />
+      <Profile />
       <Search />
     </header>
   );

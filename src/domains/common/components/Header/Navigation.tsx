@@ -1,19 +1,25 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
+import { IClassName } from "../../types";
 
-export default function Navigation() {
+interface INavigation extends IClassName {}
+
+export default function Navigation({ className }: INavigation) {
   const router = useRouter();
 
   return (
-    <nav>
-      <ul className="flex h-full font-medium">
+    <nav className={className}>
+      <ul className="flex h-full">
         {PAGE_NAVIGATIONS.map(({ href, text }) => (
           <li
             key={href}
             className={clsx(
-              "inline-block h-full w-[150px] hover:cursor-pointer hover:bg-violet-50",
-              { "bg-violet-50": href === router.pathname },
+              "relative inline-block h-full w-[150px] text-gray-700 hover:cursor-pointer hover:bg-violet-50",
+              {
+                "after:absolute after:bottom-0 after:w-full after:border-b-[3px] after:border-violet-500":
+                  href === router.pathname,
+              },
             )}
           >
             <Link href={href} passHref>
