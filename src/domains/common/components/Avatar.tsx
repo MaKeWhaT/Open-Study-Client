@@ -13,7 +13,7 @@ interface IAvatar extends IClassName {
 export default function Avatar({
   className,
   imageSrc,
-  imageAlt = "avatar-image",
+  imageAlt = "avatar-image!",
   imageWidth,
   imageHeight,
 }: IAvatar) {

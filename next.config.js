@@ -8,6 +8,9 @@ const nextConfig = {
   images: {
     domains: ["cdn.pixabay.com"],
   },
+  eslint: {
+    dirs: ["pages", "src", "stories"],
+  },
   webpack(config) {
     return merge(config, {
       resolve: {
