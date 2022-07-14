@@ -41,6 +41,10 @@ const PAGE_NAVIGATIONS = [
     text: "스터디 시작",
   },
   {
+    href: "/feeds",
+    text: "피드",
+  },
+  {
     href: "/pins",
     text: "나의 핀",
   },

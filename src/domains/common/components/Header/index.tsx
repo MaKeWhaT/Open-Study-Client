@@ -10,7 +10,7 @@ export default function Header() {
       <div className="mr-[20px] flex items-center pb-[4px]">
         <Text
           as="h1"
-          className="typo-bold-24 inline-block bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent"
+          className="typo-bold-18 inline-block bg-gradient-to-r from-indigo-500 via-purple-500 to-pink-500 bg-clip-text text-transparent"
         >
           <Link href="/" passHref>
             <a>Open Study</a>
