@@ -1,7 +1,8 @@
 import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import { IClassName } from "../../types";
+import Text from "@/src/domains/common/components/Text";
+import { IClassName } from "@/src/domains/common/types";
 
 interface INavigation extends IClassName {}
 
@@ -24,7 +25,7 @@ export default function Navigation({ className }: INavigation) {
           >
             <Link href={href} passHref>
               <a className="flex h-full w-full items-center justify-center">
-                {text}
+                <Text>{text}</Text>
               </a>
             </Link>
           </li>
