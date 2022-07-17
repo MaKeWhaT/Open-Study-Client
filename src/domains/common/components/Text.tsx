@@ -1,7 +1,9 @@
+import clsx from "clsx";
 import { HTMLAttributes, PropsWithChildren } from "react";
+import { twMerge } from "tailwind-merge";
 import { IClassName } from "@/src/domains/common/types";
 
-interface IText
+export interface IText
   extends PropsWithChildren<HTMLAttributes<HTMLElement>>,
     IClassName {
   as?: "h1" | "h2" | "h3" | "h4" | "h5" | "h6" | "p" | "span";
@@ -16,7 +18,7 @@ export default function Text({
   ...props
 }: IText) {
   return (
-    <As className={className} {...props}>
+    <As className={twMerge(clsx("text-gray-700", className))} {...props}>
       {content ?? children}
     </As>
   );

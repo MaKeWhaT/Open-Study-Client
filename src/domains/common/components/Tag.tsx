@@ -4,10 +4,11 @@ import { twMerge } from "tailwind-merge";
 import { IClassName } from "@/src/domains/common/types";
 
 interface ITag extends IClassName {
-  text: string;
+  text?: string;
 }
 
 export default function Tag({ className, text }: PropsWithChildren<ITag>) {
+  if (!text) return null;
   return (
     <span
       className={twMerge(

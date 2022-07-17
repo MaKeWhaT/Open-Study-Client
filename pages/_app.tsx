@@ -3,14 +3,16 @@ import { useRef } from "react";
 import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import Layout from "@/src/domains/common/components/Layout";
 import "@/styles/globals.css";
+import { IPageLayout } from "@/src/domains/common/types";
 
 function MyApp({ Component, pageProps }: AppProps) {
   const queryClient = useRef(new QueryClient()).current;
+  const { layout } = pageProps;
 
   return (
     <QueryClientProvider client={queryClient}>
       <Hydrate state={pageProps.dehydratedState}>
-        <Layout>
+        <Layout {...(layout as IPageLayout)}>
           <Component {...pageProps} />
         </Layout>
       </Hydrate>

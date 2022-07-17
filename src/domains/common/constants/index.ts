@@ -1,6 +1,3 @@
-import { AxiosRequestConfig } from "axios";
-
-export const DEFAULT_AXIOS_REQUEST_CONFIG: AxiosRequestConfig = {
-  baseURL: process.env.NEXT_PUBLIC_DEFAULT_AXIOS_REQUEST_BASE_URL,
-  timeout: Number(process.env.NEXT_PUBLIC_DEFAULT_AXIOS_REQUEST_TIMEOUT),
-};
+export const OPEN_STUDY_BRAND_COLOR_INDIGO = "#6366F1";
+export const OPEN_STUDY_BRAND_COLOR_PURPLE = "#A855F7";
+export const OPEN_STUDY_BRAND_COLOR_PINK = "#EC4899";
