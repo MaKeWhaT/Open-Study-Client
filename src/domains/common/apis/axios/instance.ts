@@ -1,5 +1,5 @@
 import axios from "axios";
-import { DEFAULT_AXIOS_REQUEST_CONFIG } from "@/src/domains/common/constants";
+import { DEFAULT_AXIOS_REQUEST_CONFIG } from "@/src/domains/common/constants/axios";
 
 const defaultAxiosInstance = axios.create(DEFAULT_AXIOS_REQUEST_CONFIG);
 

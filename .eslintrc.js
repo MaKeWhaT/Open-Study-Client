@@ -42,6 +42,8 @@ module.exports = {
     "import/extensions": 0,
     "react-hooks/rules-of-hooks": "error",
     "react-hooks/exhaustive-deps": "warn",
+    "react/prop-types": 0,
+    "react/no-unescaped-entities": 0,
     "import/order": [
       "warn",
       {

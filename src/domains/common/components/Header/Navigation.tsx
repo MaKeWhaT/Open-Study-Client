@@ -48,4 +48,8 @@ const PAGE_NAVIGATIONS = [
     href: "/pins",
     text: "나의 핀",
   },
+  {
+    href: "/join",
+    text: "회원가입",
+  },
 ];
