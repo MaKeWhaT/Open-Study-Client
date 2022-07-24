@@ -2,7 +2,7 @@ import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { ChangeEventHandler, useState } from "react";
+import React, { ChangeEventHandler, PropsWithChildren, useState } from "react";
 import tailwindColors from "tailwindcss/colors";
 import Divider from "@/src/domains/common/components/Divider";
 import Input from "@/src/domains/common/components/Input";
@@ -11,7 +11,7 @@ import Tag from "@/src/domains/common/components/Tag";
 import Text from "@/src/domains/common/components/Text";
 import TextLogo from "@/src/domains/common/components/TextLogo";
 import { OPEN_STUDY_ROUTE_MAP } from "@/src/domains/common/constants";
-import { addUser } from "@/src/domains/join/apis";
+import { addUser, checkUnique } from "@/src/domains/join/apis";
 
 export default function JoinContainer() {
   const router = useRouter();
@@ -21,13 +21,18 @@ export default function JoinContainer() {
   const [isPasswordValidated, setIsPasswordValidated] = useState(false);
   const [isNicknameValidated, setIsNicknameValidated] = useState(false);
 
+  const [showDuplicatedEmailMessage, setShowDuplicatedEmailMessage] =
+    useState(false);
+  const [showDuplicatedNicknameMessage, setShowDuplicatedNicknameMessage] =
+    useState(false);
+
   const [formState, setFormState] = useState({
     email: "",
     password: "",
     nickname: "",
   });
 
-  const onChangeEmail: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const onChangeEmail: ChangeEventHandler<HTMLInputElement> = async (event) => {
     // TODO: 이메일 중복검사 실행. 중복시 인풋 하단에 중복되었음을 알림.
     const email = event.target.value;
     setFormState((prevFormState) => ({
@@ -35,7 +40,15 @@ export default function JoinContainer() {
       email,
     }));
     if (EMAIL_REGEX.test(email)) {
-      setIsEmailValidated(true);
+      const { isDup } = (
+        await checkUnique({
+          field: "email",
+          value: email,
+        })
+      ).data;
+
+      setIsEmailValidated(!isDup);
+      setShowDuplicatedEmailMessage(isDup);
     } else {
       setIsEmailValidated(false);
     }
@@ -48,14 +61,27 @@ export default function JoinContainer() {
     }));
     setIsPasswordValidated(password.length > 0);
   };
-  const onChangeNickname: ChangeEventHandler<HTMLInputElement> = (event) => {
+  const onChangeNickname: ChangeEventHandler<HTMLInputElement> = async (
+    event,
+  ) => {
     // TODO: 닉네임 중복검사 실행. 중복시 인풋 하단에 중복되었음을 알림.
     const nickname = event.target.value;
     setFormState((prevFormState) => ({
       ...prevFormState,
       nickname,
     }));
-    setIsNicknameValidated(nickname.length > 0);
+    if (nickname.length > 0) {
+      const { isDup } = (
+        await checkUnique({
+          field: "nickname",
+          value: nickname,
+        })
+      ).data;
+      setIsNicknameValidated(!isDup);
+      setShowDuplicatedNicknameMessage(isDup);
+    } else {
+      setIsNicknameValidated(false);
+    }
   };
 
   const onClickJoin = () => {
@@ -103,6 +129,9 @@ export default function JoinContainer() {
             value={formState.email}
             onChange={onChangeEmail}
           />
+          {showDuplicatedEmailMessage && (
+            <ErrorText>중복된 이메일 주소입니다.</ErrorText>
+          )}
           <Input
             className="block w-full rounded-[4px] border border-gray-200 py-[10px] pl-[20px] text-center text-gray-500 placeholder:typo-regular-16"
             placeholder="비밀번호"
@@ -116,11 +145,14 @@ export default function JoinContainer() {
             className="block w-full rounded-[4px] border border-gray-200 py-[10px] pl-[20px] text-center text-gray-500 placeholder:typo-regular-16"
             placeholder="닉네임"
             type="text"
-            autoComplete="off"
+            autoComplete="new-password"
             name="nickname"
             value={formState.nickname}
             onChange={onChangeNickname}
           />
+          {showDuplicatedNicknameMessage && (
+            <ErrorText>중복된 닉네임입니다.</ErrorText>
+          )}
         </div>
         <div className="text-center">
           <button
@@ -151,3 +183,9 @@ export default function JoinContainer() {
 }
 
 const EMAIL_REGEX = /^[a-z0-9_.]+@[a-z0-9]+\.[a-z]+$/;
+
+const ErrorText = ({ children }: PropsWithChildren<{}>) => (
+  <Text as="p" className="typo-regular-12 text-red-500">
+    {children}
+  </Text>
+);
