@@ -2573,7 +2573,14 @@
   "resolved" "https://registry.npmjs.org/@types/json5/-/json5-0.0.29.tgz"
   "version" "0.0.29"
 
-"@types/lodash@^4.14.167":
+"@types/lodash-es@^4.17.6":
+  "integrity" "sha512-R+zTeVUKDdfoRxpAryaQNRKk3105Rrgx2CFRClIgRGaqDTdjsm8h6IYA8ir584W3ePzkZfst5xIgDwYrlh9HLg=="
+  "resolved" "https://registry.npmjs.org/@types/lodash-es/-/lodash-es-4.17.6.tgz"
+  "version" "4.17.6"
+  dependencies:
+    "@types/lodash" "*"
+
+"@types/lodash@*", "@types/lodash@^4.14.167":
   "integrity" "sha512-/THyiqyQAP9AfARo4pF+aCGcyiQ94tX/Is2I7HofNRqoYLgN1PBoOWu2/zTA5zMxzP5EFutMtWtGAFRKUe961Q=="
   "resolved" "https://registry.npmjs.org/@types/lodash/-/lodash-4.14.182.tgz"
   "version" "4.14.182"

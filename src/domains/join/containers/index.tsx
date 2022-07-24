@@ -1,8 +1,15 @@
+/* eslint-disable react-hooks/exhaustive-deps */
 import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
+import { debounce } from "lodash-es";
 import Link from "next/link";
 import { useRouter } from "next/router";
-import React, { ChangeEventHandler, PropsWithChildren, useState } from "react";
+import React, {
+  ChangeEventHandler,
+  PropsWithChildren,
+  useCallback,
+  useState,
+} from "react";
 import tailwindColors from "tailwindcss/colors";
 import Divider from "@/src/domains/common/components/Divider";
 import Input from "@/src/domains/common/components/Input";
@@ -11,26 +18,51 @@ import Tag from "@/src/domains/common/components/Tag";
 import Text from "@/src/domains/common/components/Text";
 import TextLogo from "@/src/domains/common/components/TextLogo";
 import { OPEN_STUDY_ROUTE_MAP } from "@/src/domains/common/constants";
-import { addUser, checkUnique } from "@/src/domains/join/apis";
+import { addUser, checkUnique, UserJoinForm } from "@/src/domains/join/apis";
 
 export default function JoinContainer() {
   const router = useRouter();
   const addUserMutation = useMutation(addUser);
-
-  const [isEmailValidated, setIsEmailValidated] = useState(false);
-  const [isPasswordValidated, setIsPasswordValidated] = useState(false);
-  const [isNicknameValidated, setIsNicknameValidated] = useState(false);
-
-  const [showDuplicatedEmailMessage, setShowDuplicatedEmailMessage] =
-    useState(false);
-  const [showDuplicatedNicknameMessage, setShowDuplicatedNicknameMessage] =
-    useState(false);
 
   const [formState, setFormState] = useState({
     email: "",
     password: "",
     nickname: "",
   });
+
+  const [isEmailValidated, setIsEmailValidated] = useState(false);
+  const [isPasswordValidated, setIsPasswordValidated] = useState(false);
+  const [isNicknameValidated, setIsNicknameValidated] = useState(false);
+
+  const [isEmailDuplicated, setIsEmailDuplicated] = useState(false);
+  const [isNicknameDuplicated, setIsNicknameDuplicated] = useState(false);
+
+  const checkIsUniqueEmail = useCallback(
+    async (email: UserJoinForm["email"]) => {
+      return setIsEmailDuplicated(
+        (await checkUnique({ field: "email", value: email })).data.isDup,
+      );
+    },
+    [setIsEmailDuplicated],
+  );
+
+  const checkIsUniqueNickname = useCallback(
+    async (nickname: UserJoinForm["nickname"]) => {
+      return setIsNicknameDuplicated(
+        (await checkUnique({ field: "nickname", value: nickname })).data.isDup,
+      );
+    },
+    [setIsNicknameDuplicated],
+  );
+
+  const debouncedCheckIsUniqueEmail = useCallback(
+    debounce(checkIsUniqueEmail, 500),
+    [checkIsUniqueEmail],
+  );
+  const debouncedCheckIsUniqueNickname = useCallback(
+    debounce(checkIsUniqueNickname, 500),
+    [checkIsUniqueNickname],
+  );
 
   const onChangeEmail: ChangeEventHandler<HTMLInputElement> = async (event) => {
     // TODO: 이메일 중복검사 실행. 중복시 인풋 하단에 중복되었음을 알림.
@@ -39,28 +71,24 @@ export default function JoinContainer() {
       ...prevFormState,
       email,
     }));
-    if (EMAIL_REGEX.test(email)) {
-      const { isDup } = (
-        await checkUnique({
-          field: "email",
-          value: email,
-        })
-      ).data;
-
-      setIsEmailValidated(!isDup);
-      setShowDuplicatedEmailMessage(isDup);
-    } else {
-      setIsEmailValidated(false);
-    }
+    setIsEmailValidated(() => {
+      const isValid = validateEmail(email);
+      if (isValid) {
+        debouncedCheckIsUniqueEmail(email);
+      }
+      return isValid;
+    });
   };
+
   const onChangePassword: ChangeEventHandler<HTMLInputElement> = (event) => {
     const password = event.target.value;
     setFormState((prevFormState) => ({
       ...prevFormState,
       password,
     }));
-    setIsPasswordValidated(password.length > 0);
+    setIsPasswordValidated(validatePassword(password));
   };
+
   const onChangeNickname: ChangeEventHandler<HTMLInputElement> = async (
     event,
   ) => {
@@ -70,18 +98,13 @@ export default function JoinContainer() {
       ...prevFormState,
       nickname,
     }));
-    if (nickname.length > 0) {
-      const { isDup } = (
-        await checkUnique({
-          field: "nickname",
-          value: nickname,
-        })
-      ).data;
-      setIsNicknameValidated(!isDup);
-      setShowDuplicatedNicknameMessage(isDup);
-    } else {
-      setIsNicknameValidated(false);
-    }
+    setIsNicknameValidated(() => {
+      const isValid = validateNickName(nickname);
+      if (isValid) {
+        debouncedCheckIsUniqueNickname(nickname);
+      }
+      return isValid;
+    });
   };
 
   const onClickJoin = () => {
@@ -129,7 +152,7 @@ export default function JoinContainer() {
             value={formState.email}
             onChange={onChangeEmail}
           />
-          {showDuplicatedEmailMessage && (
+          {isEmailDuplicated && (
             <ErrorText>중복된 이메일 주소입니다.</ErrorText>
           )}
           <Input
@@ -150,9 +173,7 @@ export default function JoinContainer() {
             value={formState.nickname}
             onChange={onChangeNickname}
           />
-          {showDuplicatedNicknameMessage && (
-            <ErrorText>중복된 닉네임입니다.</ErrorText>
-          )}
+          {isNicknameDuplicated && <ErrorText>중복된 닉네임입니다.</ErrorText>}
         </div>
         <div className="text-center">
           <button
@@ -183,6 +204,18 @@ export default function JoinContainer() {
 }
 
 const EMAIL_REGEX = /^[a-z0-9_.]+@[a-z0-9]+\.[a-z]+$/;
+
+const validateEmail = (email: UserJoinForm["email"]) => {
+  return EMAIL_REGEX.test(email);
+};
+
+const validatePassword = (password: UserJoinForm["password"]) => {
+  return password.length > 0;
+};
+
+const validateNickName = (nickname: UserJoinForm["nickname"]) => {
+  return nickname.length > 0;
+};
 
 const ErrorText = ({ children }: PropsWithChildren<{}>) => (
   <Text as="p" className="typo-regular-12 text-red-500">
