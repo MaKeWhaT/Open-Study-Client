@@ -1,29 +1,22 @@
-import Avatar, { AvatarProps } from "boring-avatars";
-import {
-  OPEN_STUDY_BRAND_COLOR_INDIGO,
-  OPEN_STUDY_BRAND_COLOR_PINK,
-  OPEN_STUDY_BRAND_COLOR_PURPLE,
-} from "@/src/domains/common/constants";
-import { IClassName } from "@/src/domains/common/types";
+import { createAvatar } from "@dicebear/avatars";
+import type { Options } from "@dicebear/avatars";
+import * as style from "@dicebear/pixel-art";
 
-interface INamedAvatar extends AvatarProps {
-  size?: number;
-  name: string;
-}
+interface INamedAvatar extends Options {}
 
-export default function NamedAvatar({ size = 50, name }: INamedAvatar) {
+export default function NamedAvatar({
+  size = 50,
+  dataUri = true,
+  ...props
+}: INamedAvatar) {
+  const avatarSrc = createAvatar(style, {
+    dataUri,
+    size,
+    ...props,
+  });
   return (
     <div className="inline-block">
-      <Avatar
-        size={size}
-        name={name}
-        variant="beam"
-        colors={[
-          OPEN_STUDY_BRAND_COLOR_INDIGO,
-          OPEN_STUDY_BRAND_COLOR_PURPLE,
-          OPEN_STUDY_BRAND_COLOR_PINK,
-        ]}
-      />
+      <img src={avatarSrc} alt={`avatar-${props.seed}`} />
     </div>
   );
 }

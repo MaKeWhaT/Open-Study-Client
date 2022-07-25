@@ -7,7 +7,9 @@ export interface UserJoinForm {
   nickname: string;
 }
 
-type AxiosAddUserFunction = (form: UserJoinForm) => Promise<AxiosResponse>;
+type AxiosAddUserFunction = (
+  form: UserJoinForm,
+) => Promise<AxiosResponse<{ accessToken: string }>>;
 
 export const addUser: AxiosAddUserFunction = (form) => {
   return axios.post("/user/join", form);

@@ -18,12 +18,17 @@ import Tag from "@/src/domains/common/components/Tag";
 import Text from "@/src/domains/common/components/Text";
 import TextLogo from "@/src/domains/common/components/TextLogo";
 import { OPEN_STUDY_ROUTE_MAP } from "@/src/domains/common/constants";
+import { OPEN_STUDY_ACCESS_TOKEN_KEY } from "@/src/domains/common/constants/storage";
+import useLocalStorage from "@/src/domains/common/hooks/useLocalStorage";
 import { addUser, checkUnique, UserJoinForm } from "@/src/domains/join/apis";
 
 export default function JoinContainer() {
   const router = useRouter();
   const addUserMutation = useMutation(addUser);
-
+  const [, setAccessTokenToStorage] = useLocalStorage({
+    key: OPEN_STUDY_ACCESS_TOKEN_KEY,
+    defaultValue: "",
+  });
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -112,8 +117,9 @@ export default function JoinContainer() {
       onError() {
         // TODO: 회원가입 실패 토스트 메시지 표시
       },
-      onSuccess() {
+      onSuccess({ data }) {
         // TODO: 회원가입 성공 토스트 메시지 표시
+        setAccessTokenToStorage(data.accessToken);
         router.push(OPEN_STUDY_ROUTE_MAP.HOME);
       },
     });
@@ -135,7 +141,7 @@ export default function JoinContainer() {
           <Divider className="border-gray-100" />
         </div>
         <div className="relative mb-[20px] text-center">
-          <NamedAvatar size={150} name={formState.nickname} />
+          <NamedAvatar size={150} seed={formState.nickname} />
           <Tag
             className="absolute bottom-0 left-1/2 -translate-x-1/2 bg-gray-100/70 text-[14px] font-medium"
             text={formState.nickname || "what's your name?"}
