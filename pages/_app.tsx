@@ -1,6 +1,10 @@
+import {
+  Hydrate,
+  QueryClient,
+  QueryClientProvider,
+} from "@tanstack/react-query";
 import type { AppProps } from "next/app";
 import { useRef } from "react";
-import { Hydrate, QueryClient, QueryClientProvider } from "react-query";
 import Layout from "@/src/domains/common/components/Layout";
 import "@/styles/globals.css";
 import { IPageLayout } from "@/src/domains/common/types";
