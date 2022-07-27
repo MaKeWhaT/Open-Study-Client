@@ -8,6 +8,7 @@ import React, {
   ChangeEventHandler,
   PropsWithChildren,
   useCallback,
+  useEffect,
   useState,
 } from "react";
 import tailwindColors from "tailwindcss/colors";
@@ -25,10 +26,11 @@ import { addUser, checkUnique, UserJoinForm } from "@/src/domains/join/apis";
 export default function JoinContainer() {
   const router = useRouter();
   const addUserMutation = useMutation(addUser);
-  const [, setAccessTokenToStorage] = useLocalStorage({
-    key: OPEN_STUDY_ACCESS_TOKEN_KEY,
-    defaultValue: "",
-  });
+  const [, setAccessTokenToStorage, removeAccessTokenFromStorage] =
+    useLocalStorage({
+      key: OPEN_STUDY_ACCESS_TOKEN_KEY,
+      defaultValue: "",
+    });
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -127,8 +129,12 @@ export default function JoinContainer() {
 
   const isAllFormsValidated =
     isEmailValidated && isPasswordValidated && isNicknameValidated;
+
+  useEffect(() => {
+    removeAccessTokenFromStorage();
+  }, []);
   return (
-    <article className="mt-[100px]">
+    <div className="mt-[100px]">
       <div className="mx-auto max-w-[600px] rounded-[4px] border border-gray-200 bg-white p-[20px]">
         <div className="text-center">
           <TextLogo as="h2" className="typo-bold-32">
@@ -205,7 +211,7 @@ export default function JoinContainer() {
           </button>
         </div>
       </div>
-    </article>
+    </div>
   );
 }
 

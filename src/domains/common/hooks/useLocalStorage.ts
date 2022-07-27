@@ -12,7 +12,10 @@ export default function useLocalStorage({
     const setStorageValue = (nextValue: typeof defaultValue) => {
       localStorage.setItem(key, nextValue);
     };
-    return [storageValue, setStorageValue];
+    const removeStorageValue = () => {
+      localStorage.removeItem(key);
+    };
+    return [storageValue, setStorageValue, removeStorageValue];
   }
-  return [defaultValue, () => {}];
+  return [defaultValue, () => {}, () => {}];
 }

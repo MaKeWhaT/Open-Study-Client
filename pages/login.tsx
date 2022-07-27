@@ -1,8 +1,9 @@
 import { NextPage } from "next";
 import { IPageLayout } from "@/src/domains/common/types";
+import LoginContainier from "@/src/domains/login/containers";
 
 const Login: NextPage = () => {
-  return <div>Login</div>;
+  return <LoginContainier />;
 };
 
 export async function getStaticProps() {

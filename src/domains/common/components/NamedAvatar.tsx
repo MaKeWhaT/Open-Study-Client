@@ -1,3 +1,4 @@
+/* eslint-disable @next/next/no-img-element */
 import { createAvatar } from "@dicebear/avatars";
 import type { Options } from "@dicebear/avatars";
 import * as style from "@dicebear/pixel-art";
