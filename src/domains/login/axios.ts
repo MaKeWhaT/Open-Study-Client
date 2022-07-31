@@ -1,6 +1,6 @@
 import { AxiosResponse } from "axios";
 import axios from "@/src/domains/common/apis/axios/instance";
-import { UserJoinForm } from "@/src/domains/join/apis";
+import { UserJoinForm } from "@/src/domains/join/axios";
 
 export type UserLoginForm = Omit<UserJoinForm, "nickname">;
 

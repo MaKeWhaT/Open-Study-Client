@@ -1,3 +1,6 @@
+export const ON_DEVELOPMENT = process.env.NODE_ENV === "development";
+export const ON_PRODUCTION = process.env.NODE_ENV === "production";
+
 export const OPEN_STUDY_BRAND_COLOR_INDIGO = "#6366F1";
 export const OPEN_STUDY_BRAND_COLOR_PURPLE = "#A855F7";
 export const OPEN_STUDY_BRAND_COLOR_PINK = "#EC4899";

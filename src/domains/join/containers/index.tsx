@@ -1,5 +1,4 @@
 /* eslint-disable react-hooks/exhaustive-deps */
-import { useMutation } from "@tanstack/react-query";
 import clsx from "clsx";
 import { debounce } from "lodash-es";
 import Link from "next/link";
@@ -21,11 +20,12 @@ import TextLogo from "@/src/domains/common/components/TextLogo";
 import { OPEN_STUDY_ROUTE_MAP } from "@/src/domains/common/constants";
 import { OPEN_STUDY_ACCESS_TOKEN_KEY } from "@/src/domains/common/constants/storage";
 import useLocalStorage from "@/src/domains/common/hooks/useLocalStorage";
-import { addUser, checkUnique, UserJoinForm } from "@/src/domains/join/apis";
+import { checkUnique, UserJoinForm } from "@/src/domains/join/axios";
+import { useAddUserMutation } from "@/src/domains/join/query";
 
 export default function JoinContainer() {
   const router = useRouter();
-  const addUserMutation = useMutation(addUser);
+  const addUserMutation = useAddUserMutation();
   const [, setAccessTokenToStorage, removeAccessTokenFromStorage] =
     useLocalStorage({
       key: OPEN_STUDY_ACCESS_TOKEN_KEY,
