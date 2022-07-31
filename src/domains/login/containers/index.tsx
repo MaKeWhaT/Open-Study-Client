@@ -1,4 +1,3 @@
-import { useMutation } from "@tanstack/react-query";
 import { useRouter } from "next/router";
 import {
   ChangeEventHandler,
@@ -10,11 +9,11 @@ import FormBox from "@/src/domains/common/components/FormBox";
 import { OPEN_STUDY_ROUTE_MAP } from "@/src/domains/common/constants";
 import { OPEN_STUDY_ACCESS_TOKEN_KEY } from "@/src/domains/common/constants/storage";
 import useLocalStorage from "@/src/domains/common/hooks/useLocalStorage";
-import { login } from "@/src/domains/login/apis";
+import { useLoginUserMutation } from "@/src/domains/login/query";
 
 export default function LoginContainer() {
   const router = useRouter();
-  const loginMutation = useMutation(login);
+  const loginUserMutation = useLoginUserMutation();
   const [, setAccessTokenToStorage, removeAccessTokenFromStorage] =
     useLocalStorage({
       key: OPEN_STUDY_ACCESS_TOKEN_KEY,
@@ -38,7 +37,7 @@ export default function LoginContainer() {
   };
 
   const onClickLogin = async () => {
-    loginMutation.mutate(
+    loginUserMutation.mutate(
       { email, password },
       {
         onError() {
