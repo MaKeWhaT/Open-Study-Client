@@ -1,10 +1,6 @@
 import { useRouter } from "next/router";
-import {
-  ChangeEventHandler,
-  KeyboardEventHandler,
-  useEffect,
-  useState,
-} from "react";
+import { ChangeEventHandler, KeyboardEventHandler, useState } from "react";
+import toast from "react-hot-toast";
 import FormBox from "@/src/domains/common/components/FormBox";
 import { OPEN_STUDY_ROUTE_MAP } from "@/src/domains/common/constants";
 import { OPEN_STUDY_ACCESS_TOKEN_KEY } from "@/src/domains/common/constants/storage";
@@ -14,11 +10,10 @@ import { useLoginUserMutation } from "@/src/domains/login/query";
 export default function LoginContainer() {
   const router = useRouter();
   const loginUserMutation = useLoginUserMutation();
-  const [, setAccessTokenToStorage, removeAccessTokenFromStorage] =
-    useLocalStorage({
-      key: OPEN_STUDY_ACCESS_TOKEN_KEY,
-      defaultValue: "",
-    });
+  const [, setAccessTokenToStorage] = useLocalStorage({
+    key: OPEN_STUDY_ACCESS_TOKEN_KEY,
+    defaultValue: "",
+  });
 
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
@@ -42,24 +37,23 @@ export default function LoginContainer() {
       {
         onError() {
           // TODO: 로그인 API 에러 메시지 표시, Axios Error Interceptor랑 역할이 충돌하는 부분.
+          toast.error("에러 발생, 다시 시도해주세요.");
         },
         onSuccess({ data }) {
           const { OK: isLoginSucceed, accessToken } = data;
           if (isLoginSucceed) {
             // TODO: 로그인 성공 토스트 메시지 표시
+            toast.success("로그인 했습니다.");
             setAccessTokenToStorage(accessToken);
             router.push(OPEN_STUDY_ROUTE_MAP.HOME);
           } else {
             // TODO: 로그인 실패 토스트 메시지 표시
+            toast.error("로그인 실패, 다시 시도해주세요.");
           }
         },
       },
     );
   };
-
-  useEffect(() => {
-    removeAccessTokenFromStorage();
-  }, [removeAccessTokenFromStorage]);
 
   return (
     <div className="mt-[100px]">

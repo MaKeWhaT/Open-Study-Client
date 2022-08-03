@@ -1,7 +1,8 @@
 import type { NextPage } from "next";
+import HomeContainer from "@/src/domains/home/containers";
 
 const Home: NextPage = () => {
-  return <div className=""></div>;
+  return <HomeContainer />;
 };
 
 export default Home;

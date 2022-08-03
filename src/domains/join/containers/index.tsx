@@ -10,6 +10,7 @@ import React, {
   useEffect,
   useState,
 } from "react";
+import toast from "react-hot-toast";
 import tailwindColors from "tailwindcss/colors";
 import Divider from "@/src/domains/common/components/Divider";
 import Input from "@/src/domains/common/components/Input";
@@ -26,11 +27,10 @@ import { useAddUserMutation } from "@/src/domains/join/query";
 export default function JoinContainer() {
   const router = useRouter();
   const addUserMutation = useAddUserMutation();
-  const [, setAccessTokenToStorage, removeAccessTokenFromStorage] =
-    useLocalStorage({
-      key: OPEN_STUDY_ACCESS_TOKEN_KEY,
-      defaultValue: "",
-    });
+  const [, setAccessTokenToStorage] = useLocalStorage({
+    key: OPEN_STUDY_ACCESS_TOKEN_KEY,
+    defaultValue: "",
+  });
   const [formState, setFormState] = useState({
     email: "",
     password: "",
@@ -118,11 +118,13 @@ export default function JoinContainer() {
     addUserMutation.mutate(formState, {
       onError() {
         // TODO: 회원가입 실패 토스트 메시지 표시
+        toast.error("회원가입 오류 발생, 다시 시도해주세요.");
       },
       onSuccess({ data }) {
         // TODO: 회원가입 성공 토스트 메시지 표시
         setAccessTokenToStorage(data.accessToken);
         router.push(OPEN_STUDY_ROUTE_MAP.HOME);
+        toast.success("회원가입 성공, 환영합니다.");
       },
     });
   };
@@ -130,9 +132,6 @@ export default function JoinContainer() {
   const isAllFormsValidated =
     isEmailValidated && isPasswordValidated && isNicknameValidated;
 
-  useEffect(() => {
-    removeAccessTokenFromStorage();
-  }, []);
   return (
     <div className="mt-[100px]">
       <div className="mx-auto max-w-[600px] rounded-[4px] border border-gray-200 bg-white p-[20px]">

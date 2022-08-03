@@ -6,6 +6,7 @@ import {
 import { ReactQueryDevtools } from "@tanstack/react-query-devtools";
 import type { AppProps } from "next/app";
 import { useRef } from "react";
+import { Toaster } from "react-hot-toast";
 import Layout from "@/src/domains/common/components/Layout";
 import "@/styles/globals.css";
 import { ON_DEVELOPMENT } from "@/src/domains/common/constants";
@@ -26,6 +27,11 @@ function MyApp({ Component, pageProps }: AppProps) {
           <Component {...pageProps} />
         </Layout>
       </Hydrate>
+      <Toaster
+        containerStyle={{ top: "68px" }}
+        position="top-center"
+        toastOptions={{ duration: 3000 }}
+      />
     </QueryClientProvider>
   );
 }

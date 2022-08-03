@@ -1,37 +1,21 @@
 import clsx from "clsx";
 import { twMerge } from "tailwind-merge";
-import Avatar from "@/src/domains/common/components/Avatar";
-import GaugeBar from "@/src/domains/common/components/GaugeBar";
+import NamedAvatar from "@/src/domains/common/components/NamedAvatar";
 import Tag from "@/src/domains/common/components/Tag";
+import { useMeQuery } from "@/src/domains/common/query";
 import { IClassName } from "@/src/domains/common/types";
 
 interface IProfile extends IClassName {}
 
 export default function Profile({ className }: IProfile) {
+  const { data, isLoading } = useMeQuery();
+  const { nickname } = data?.data ?? {};
+
   return (
-    <div className={twMerge(clsx("flex w-[250px] gap-x-[5px]", className))}>
-      <div className="flex w-[45px] flex-shrink-0 flex-grow-0 items-center">
-        <Avatar
-          className="rounded-lg"
-          imageSrc="https://cdn.pixabay.com/photo/2022/07/06/12/58/woman-7305088_1280.jpg"
-          imageWidth={45}
-          imageHeight={45}
-        />
-      </div>
-      <div className="flex w-[200px] flex-shrink-0 flex-grow-0 flex-col justify-center">
-        <div className="flex w-full text-[14px]">
-          <span className="text-gray-700 line-clamp-1">익명의 나비</span>
-          <Tag
-            className="ml-auto flex-shrink-0 flex-grow-0"
-            text={"Lv. 3"}
-          ></Tag>
-        </div>
-        <div>
-          <GaugeBar
-            classes={{ bar: "mt-[4px]" }}
-            currentValue={47}
-            totalValue={100}
-          />
+    <div className={twMerge(clsx("flex gap-x-[5px]", className))}>
+      <div className="flex flex-shrink-0 items-center">
+        <div className="h-[45px] w-[45px] overflow-hidden rounded-full border border-gray-200 p-[2px] hover:cursor-pointer hover:border-gray-400">
+          <NamedAvatar size={40} seed={nickname} />
         </div>
       </div>
     </div>

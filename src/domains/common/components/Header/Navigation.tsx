@@ -2,13 +2,13 @@ import clsx from "clsx";
 import Link from "next/link";
 import { useRouter } from "next/router";
 import Text from "@/src/domains/common/components/Text";
+import { useMeQuery } from "@/src/domains/common/query";
 import { IClassName } from "@/src/domains/common/types";
 
 interface INavigation extends IClassName {}
 
 export default function Navigation({ className }: INavigation) {
   const router = useRouter();
-
   return (
     <nav className={className}>
       <ul className="flex h-full">
@@ -47,13 +47,5 @@ const PAGE_NAVIGATIONS = [
   {
     href: "/pins",
     text: "나의 핀",
-  },
-  {
-    href: "/login",
-    text: "로그인",
-  },
-  {
-    href: "/join",
-    text: "회원가입",
   },
 ];
